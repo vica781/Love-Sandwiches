@@ -73,6 +73,7 @@ def validate_data(values):
 #    surplus_worksheet.append_row(data)
 #    print("Surplus worksheet updated successfully.\n")
 
+
 def update_worksheet(data,worksheet):
     """
     Receives a list of integers to be inserted into a worksheet
@@ -82,6 +83,7 @@ def update_worksheet(data,worksheet):
     worksheet_to_update = SHEET.worksheet(worksheet)
     worksheet_to_update.append_row(data)
     print(f"{worksheet} worksheet updated successfully.\n")
+
 
 def calculate_surplus_data(sales_row):
     """
@@ -102,6 +104,7 @@ def calculate_surplus_data(sales_row):
     
     return surplus_data
 
+
 def get_last_5_entries_data():
     """
     Collects columns of data from the sales worksheet, collecting 
@@ -117,6 +120,7 @@ def get_last_5_entries_data():
     
     return columns
 
+
 def calculate_stock_data(data):
     """
     Calculate the average stock for each item type, adding 10%
@@ -131,9 +135,15 @@ def calculate_stock_data(data):
         new_stock_data.append(round(stock_num))
 
     return new_stock_data 
-    
 
 
+def get_stock_values(data):
+    """
+    Get the stock values for each sandwich type from the stock worksheet.
+    """
+    headings = SHEET.worksheet("stock").get_all_values()[0]
+    stock_values = {headings[i]: data[i] for i in range(len(headings))}
+    return stock_values
 
 
 def main():
@@ -148,6 +158,9 @@ def main():
     sales_columns = get_last_5_entries_data()
     stock_data = calculate_stock_data(sales_columns)
     update_worksheet(stock_data, "stock")
+    stock_values = get_stock_values(stock_data)
+    print(f"Make the following numbers of sandwiches for next market:\n\n {stock_values}")
+    
 
 print("Welcome to Love Sandwiches Data Automation")
 main()
